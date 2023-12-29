@@ -1,6 +1,7 @@
 <h1>About</h1>
 <p><a href="https://github.com/mdecycu/cmsite"> https://github.com/mdecycu/cmsite </a></p>
-<h1>W1~W4</h1>
+<h1>作業區</h1>
+<h2>W1~W4</h2>
 <p><strong>建立帳號與網站</strong></p>
 <p>利用已經帶有 Brython 執行環境的倉儲, 在設定學員 Github Classroom 首次作業時, 即經由 template 置入, 因此學員只要:</p>
 <p>利用學校 email 帳號, 建立 Github 帳號, 以英文姓名縮寫加上一組數字, 選擇最短帳號名稱 例如: jfk40723199, jfk 為其自選的姓名縮寫, 而隨後則加上各自的學號.</p>
@@ -13,7 +14,8 @@
 <p>2023/09/26 在 1a w3 課程進行到建立各學員 site 作業時發現, 將 Replit 導入 Github 倉儲的流程中, 所產生的系統間權限設定, 必須由 Github Classroom 管理帳號 (以 cp2023 為例, 附屬在 mdecp2023 帳號下), 針對各用戶所提出的個別 Replit 權限 requests (以 site-scrum-1 倉儲為例, 只能透過 Replit 提出控管 mdecp2023/site-scrum-1 倉儲的權限)<span> </span><span>逐一進行設定</span>.</p>
 <p><img alt="" class="add_border" height="310" src="https://mde.tw/cpnote/images/mdecp2023_replit_requests.png" width="400"/></p>
 <p>(上圖顯示共有三名用戶針對 mdecp2023 帳號下的 Github Classroom 倉儲提出 Replit 連線要求, 其中只有最上方用戶的 request 取得 mdecp2023/site-scrum-1 倉儲的維護權限, 其餘兩則 requests 則仍處於待審核階段. 意即若要讓各用戶整合 Replit,<span> </span><span>每一個 Github Classroom 作業, 管理者都必須手動處理超過兩百則的 requests</span>)</p>
-<p>為去除管理者的手動設定負擔, 決定 2023 cp 與 cad 等課程將放棄使用 Github Classroom. 改為由各學員自行針對課程建立用來評分的課程倉儲與網站 (cp 課程建立 cp2023 倉儲, cad 課程則建立 cad2023 倉儲), 直接附屬在學員的 Github 帳號下, 後續的 submodule 設定與倉儲協同權限則統一由各學員自行負責</p><h1>w5</h1>
+<p>為去除管理者的手動設定負擔, 決定 2023 cp 與 cad 等課程將放棄使用 Github Classroom. 改為由各學員自行針對課程建立用來評分的課程倉儲與網站 (cp 課程建立 cp2023 倉儲, cad 課程則建立 cad2023 倉儲), 直接附屬在學員的 Github 帳號下, 後續的 submodule 設定與倉儲協同權限則統一由各學員自行負責</p>
+<h2>w5</h2>
 <pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">// 包含標準輸出入程式庫的標頭文件
 // https://blog.csdn.net/weixin_38468077/article/details/101069365
 // http://www.gnuplot.info/demo/
@@ -57,7 +59,94 @@ int main() {
 
     return 0;
 }</pre>
-<p><img alt="" height="200" src="/images/gnuplot_ex1.png" width="400"/></p><h1>w6</h1>
+<p><img alt="" height="200" src="/images/gnuplot_ex1.png" width="400"/></p>
+<h2>w6</h2>
+<h3>CHIAN</h3>
+<pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+#include &lt;gd.h&gt;
+#include &lt;math.h&gt;
+
+void draw_chinese_flag(gdImagePtr img);
+
+int main() {
+    int width = 300; // 國旗寬度
+    int height = 200; // 國旗高度
+
+    gdImagePtr im = gdImageCreateTrueColor(width, height);
+    gdImageAlphaBlending(im, 0);
+
+    draw_chinese_flag(im);
+
+    FILE *outputFile = fopen("./../images/proc_flag.png", "wb");
+    if (outputFile == NULL) {
+        fprintf(stderr, "打开输出文件时出错。\n");
+        return 1;
+    }
+
+    gdImagePngEx(im, outputFile, 9);
+    fclose(outputFile);
+    gdImageDestroy(im);
+
+    return 0;
+}
+
+// 声明 draw_star 函数
+void draw_star(gdImagePtr img, int x, int y, int size, int color, double rotation_angle);
+
+void draw_chinese_flag(gdImagePtr img) {
+    int width = gdImageSX(img);
+    int height = gdImageSY(img);
+    int red, yellow;
+
+    // 國旗顏色
+    red = gdImageColorAllocate(img, 255, 0, 0); // 紅色背景
+    yellow = gdImageColorAllocate(img, 255, 255, 0); // 黃色星星
+
+    // 畫紅色背景
+    gdImageFilledRectangle(img, 0, 0, width, height, red);
+
+    // 設置星星的大小和位置
+    int star_size = (int)(0.28 * height);
+    int star_x = (int)(0.165 * width);
+    int star_y = (int)(0.265 * height);
+
+    // 畫大星星
+    draw_star(img, star_x, star_y, star_size, yellow, 11.0);
+
+    // 繪製小星星，位置根據實際國旗比例計算
+    double radius = 0.15 * height;
+    double angle = 360 / 7 * M_PI / 179.0;
+    double rotation = -M_PI / 7.5;
+    int cx = (int)(0.32 * width);
+    int cy = (int)(0.27 * height);
+
+    for (int i = -1; i &lt; 3; i++) {
+        int x = (int)(cx + radius * cos(i * angle + rotation));
+        int y = (int)(cy + radius * sin(i * angle + rotation));
+        draw_star(img, x, y, 19, yellow, M_PI / 5.0);
+    }
+}
+
+void draw_star(gdImagePtr img, int x, int y, int size, int color, double rotation_angle) {
+    gdPoint points[10];
+
+    // 计算星形的五个外点和五个内点
+    double outer_radius = size / 2;
+    double inner_radius = size / 6;
+    double angle = M_PI / 5.0;
+
+    for (int i = 0; i &lt; 10; i++) {
+        double radius = (i % 2 == 0) ? outer_radius : inner_radius;
+        double theta = rotation_angle + i * angle;
+        points[i].x = x + radius * cos(theta);
+        points[i].y = y + radius * sin(theta);
+    }
+
+    // 使用 gdImageFilledPolygon 绘制星形
+    gdImageFilledPolygon(img, points, 10, color);
+}</pre>
+<p><img alt="" height="267" src="/images/proc_flag.png" width="400"/></p>
+<h3>ROC</h3>
 <pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">// https://en.wikipedia.org/wiki/Flag_of_the_Republic_of_China
 // 內政部國旗參考資料: https://www.moi.gov.tw/cp.aspx?n=10621
 // cc roc_flag_in_gd.c -lgd -lm to link with gd and math library
@@ -180,7 +269,7 @@ void draw_white_sun(gdImagePtr img, int center_x, int center_y, int sun_radius, 
     gdImagePolygon(img, points, 4, color);
     }
 }</pre>
-<p><img alt="" height="267" src="/images/roc_flag_in_gd.png" width="400"/></p>
+<p><img alt="" height="267" src="/images/roc_flag_in_gd.png" width="400"/></p><h3>USA</h3>
 <pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">  #include &lt;stdio.h&gt;
   #include &lt;gd.h&gt;
   #include &lt;math.h&gt;
@@ -270,7 +359,7 @@ void draw_white_sun(gdImagePtr img, int center_x, int center_y, int sun_radius, 
       gdImageFilledPolygon(img, points, 10, color);
   }
 </pre>
-<p><img alt="" height="211" src="/images/usa_flag.png" width="400"/></p>
+<p><img alt="" height="211" src="/images/usa_flag.png" width="400"/></p><h3>JAPAN</h3>
 <pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
@@ -332,93 +421,9 @@ void draw_red_sun(gdImagePtr img, int x, int y, int size, int color) {
 }</pre>
 <p><img alt="" height="267" src="/images/japan_flag.png" width="400"/></p>
 <p></p>
-<div class="line number1 index0 alt2"><code class="cpp preprocessor"></code></div>
-<div class="line number1 index0 alt2"><code class="cpp preprocessor"></code></div>
-<div class="line number1 index0 alt2">
-<pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
-#include &lt;gd.h&gt;
-#include &lt;math.h&gt;
- 
-void draw_chinese_flag(gdImagePtr img);
- 
-int main() {
-    int width = 300; // 國旗寬度
-    int height = 200; // 國旗高度
- 
-    gdImagePtr im = gdImageCreateTrueColor(width, height);
-    gdImageAlphaBlending(im, 0);
- 
-    draw_chinese_flag(im);
- 
-    FILE *outputFile = fopen("./../images/proc_flag.png", "wb");
-    if (outputFile == NULL) {
-        fprintf(stderr, "打开输出文件时出错。\n");
-        return 1;
-    }
- 
-    gdImagePngEx(im, outputFile, 9);
-    fclose(outputFile);
-    gdImageDestroy(im);
- 
-    return 0;
-}
- 
-// 声明 draw_star 函数
-void draw_star(gdImagePtr img, int x, int y, int size, int color, double rotation_angle);
- 
-void draw_chinese_flag(gdImagePtr img) {
-    int width = gdImageSX(img);
-    int height = gdImageSY(img);
-    int red, yellow;
- 
-    // 國旗顏色
-    red = gdImageColorAllocate(img, 255, 0, 0); // 紅色背景
-    yellow = gdImageColorAllocate(img, 255, 255, 0); // 黃色星星
- 
-    // 畫紅色背景
-    gdImageFilledRectangle(img, 0, 0, width, height, red);
- 
-    // 設置星星的大小和位置
-    int star_size = (int)(0.28 * height);
-    int star_x = (int)(0.165 * width);
-    int star_y = (int)(0.265 * height);
- 
-    // 畫大星星
-    draw_star(img, star_x, star_y, star_size, yellow, 11.0);
- 
-    // 繪製小星星，位置根據實際國旗比例計算
-    double radius = 0.15 * height;
-    double angle = 360 / 7 * M_PI / 179.0;
-    double rotation = -M_PI / 7.5;
-    int cx = (int)(0.32 * width);
-    int cy = (int)(0.27 * height);
- 
-    for (int i = -1; i &lt; 3; i++) {
-        int x = (int)(cx + radius * cos(i * angle + rotation));
-        int y = (int)(cy + radius * sin(i * angle + rotation));
-        draw_star(img, x, y, 19, yellow, M_PI / 5.0);
-    }
-}
- 
-void draw_star(gdImagePtr img, int x, int y, int size, int color, double rotation_angle) {
-    gdPoint points[10];
- 
-    // 计算星形的五个外点和五个内点
-    double outer_radius = size / 2;
-    double inner_radius = size / 6;
-    double angle = M_PI / 5.0;
- 
-    for (int i = 0; i &lt; 10; i++) {
-        double radius = (i % 2 == 0) ? outer_radius : inner_radius;
-        double theta = rotation_angle + i * angle;
-        points[i].x = x + radius * cos(theta);
-        points[i].y = y + radius * sin(theta);
-    }
- 
-    // 使用 gdImageFilledPolygon 绘制星形
-    gdImageFilledPolygon(img, points, 10, color);
-}</pre>
-<code class="cpp preprocessor"><img alt="" height="267" src="/images/proc_flag.png" width="400"/><br/></code></div>
+<p><br/><br/><br/><br/><br/></p>
+<div class="line number1 index0 alt2"><code class="cpp preprocessor"> </code></div>
+<div class="line number1 index0 alt2"><code class="cpp preprocessor"></code></div><h3>UK</h3>
 <div class="line number1 index0 alt2"><code class="cpp preprocessor"></code></div>
 <div class="line number1 index0 alt2">
 <pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
@@ -559,7 +564,7 @@ void draw_uk_flag(gdImagePtr img) {
     gdImageFilledRectangle(img, center_x + 1.5 * cross_width, 0, center_x - 1.5 * cross_width, height, red);
     gdImageFilledRectangle(img, 0, center_y + 1.5 * cross_arm_width, width, center_y - 1.5 * cross_arm_width, red);
 }</pre>
-<code class="cpp preprocessor"><img alt="" height="200" src="/images/uk_flag.png" width="400"/><br/><br/></code></div>
+<code class="cpp preprocessor"><img alt="" height="200" src="/images/uk_flag.png" width="400"/><br/><br/></code></div><h3>KOREA</h3>
 <div class="line number1 index0 alt2"><code class="cpp preprocessor"></code></div>
 <div class="line number1 index0 alt2">
 <pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
@@ -922,7 +927,7 @@ if (outputFile == NULL) {
       return 0;
   }</pre>
 <code class="cpp preprocessor"><img alt="" height="267" src="/images/korea_flag.png" width="400"/><br/></code></div>
-<div class="line number1 index0 alt2"><code class="cpp preprocessor"></code></div><h1>w7</h1>
+<div class="line number1 index0 alt2"><code class="cpp preprocessor"></code></div><h2>w7</h2>
 <p>Map: site map 網站所有頁面</p>
 <p>EditA: edit all pages, 使用時機為(1)解決多人共用網站時的衝突, 或(2)刪除特定頁面</p>
 <p>Edit: edit one page, 先選頁面, 再選 Edit 然後才能進入編輯模式</p>
@@ -933,15 +938,14 @@ if (outputFile == NULL) {
 <p>FUpload: file upload, 一般檔案上傳功能, 資料會放入 downloads 目錄中</p>
 <p>FList: file list, 列出位於 downloads 目錄下的檔案</p>
 <p>Logout: 登出</p>
-<p>Convert: 將 config/content.htm 經過分頁程式處理後, 轉為 content 目錄下的超文件w</p>
-<h1>w10</h1>
+<p>Convert: 將 config/content.htm 經過分頁程式處理後, 轉為 content 目錄下的超文件w</p><h2>w10</h2>
 <p>線上簡報、網誌與多媒體影片製作工具:</p>
 <p><a href="https://leo-editor.github.io/leo-editor/">Leo Editor</a><span> </span>(<a href="https://groups.google.com/g/leo-editor">討論群組</a>) 為大綱管理系統, 可以當作程式開發的 IDE (Integrated Development Environment) 使用, 可用來編輯 reveal.js 簡報檔案中的 html 與 markdown, 也可用來編輯 Pelican 網誌 markdown 與轉檔, 並且在電腦輔助設計與分析過程中, 可以用來解讀 CoppeliaSim XML 格式檔案.</p>
 <p>因為 Python 3.12.0 環境下 Leo Editor 還無法正常透過 pip 安裝, 因此必須手動安裝 PyQt5 之後, 再使用 pip install leo, 所完成的 Python 3.12.0: <a href="https://nfuedu-my.sharepoint.com/:u:/g/personal/yen_nfu_edu_tw/EYf6RiAqXAFJllAizi_-iZ4BT9ZEn8-bT2V8TVjd9p446Q?e=NSCciC">Python312_leo_664_PyQt5.7z</a><span> </span>(需要下載密碼)</p>
 <p><a href="https://www.debugmode.com/wink.html">Wink</a><span> </span>為操作流程影片製作套件, 可以在電腦操作過程, 儲存關鍵頁面與滑鼠點擊區域後, 加上輔助文字說明後製作成 mp4 影片檔.</p>
 <p><a href="https://github.com/ShareX/ShareX/releases">ShareX</a><span> </span>為螢幕畫面取像或錄影套件, 可以擷取電腦畫面任一區域存為影像檔, 或者結合語音說明與滑鼠操作錄製說明影片.</p>
 <p><a href="https://github.com/obsproject/obs-studio/releases">OBS</a><span> </span>為電腦廣播製作系統, 可以結合各種語音、圖像與影片製作出多元的電腦操作說明影片.</p>
-<p>Wink 與 ShareX 都需要<span> </span><a href="https://ffmpeg.org/download.html#build-windows">ffmpeq.exe</a>.</p><h1>w12</h1>
+<p>Wink 與 ShareX 都需要<span> </span><a href="https://ffmpeg.org/download.html#build-windows">ffmpeq.exe</a>.</p><h2>w12</h2>
 <pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
@@ -1088,9 +1092,8 @@ return 1;
         return 0;
     }
 </pre>
-<p><img alt="" height="300" src="/images/hellogd2.png" width="400"/></p><h1>W13</h1>
-<p>這堂課讓學習了很多的程式,但是難度非常的高,需要和同學一起討論才能完成,希望我能越來越厲害,自己獨當一面去教其他同學,程式讓我們的生活可以更加便利,什麼事情都可以寫程式來完成,就不需要依靠很多的人力,就能輕鬆完成,在這堂課目前遇到最大的困難就是網路的問題,但之後老師說用隨身碟安裝一些程式就可以連上網路了,再做其他的應用就非常順利</p>
-<h1>note</h1>
+<p><img alt="" height="300" src="/images/hellogd2.png" width="400"/></p><h2>W13</h2>
+<p>這堂課讓學習了很多的程式,但是難度非常的高,需要和同學一起討論才能完成,希望我能越來越厲害,自己獨當一面去教其他同學,程式讓我們的生活可以更加便利,什麼事情都可以寫程式來完成,就不需要依靠很多的人力,就能輕鬆完成,在這堂課目前遇到最大的困難就是網路的問題,但之後老師說用隨身碟安裝一些程式就可以連上網路了,再做其他的應用就非常順利</p><h1>note</h1>
 <h2>puttygen</h2>
 <p>使用puttygen.exe定位主機位置獲得key(點Generate)</p>
 <p><img alt="" height="288" src="https://41223136.github.io/cp2023/images/puttygen.png" width="400"/></p>
@@ -1100,7 +1103,8 @@ return 1;
 <p>再到github帳號setting的ssh and gpg keys新增一把key</p>
 <p>把剛剛複製的key-rsa貼上之後點save private key 即可!</p>
 <p>儲存到<span>tinyc-data-home<span> </span></span>名稱:學號</p>
-<p>將鑰匙儲存在自己的USB當中</p><h2>SSH</h2>
+<p>將鑰匙儲存在自己的USB當中</p>
+<h2>SSH</h2>
 <p><span>在putty資料夾內開啟puttygen.exe做一把金鑰匙</span></p>
 <p><span><span>將key儲存在github帳號內(開啟設定點選ssh)</span></span></p>
 <p><span><span>返回puttygen.exe按儲存私鑰即可</span></span></p>
@@ -1112,7 +1116,8 @@ return 1;
 <p><span><span><img alt="" height="365" src="/images/2.png" width="400"/></span></span></p>
 <p><span>點選代理更改設定</span></p>
 <p><span><img alt="" height="360" src="/images/3.png" width="400"/></span></p>
-<p>完成</p><h1>MSD</h1>
+<p>完成</p>
+<h1>MSD</h1>
 <p><span>Mass-Spring-Damper 是一個典型的物理模型, 由質量-彈簧-阻尼器等三個元件組成, 若將彈簧其拉力與變形量成正比, 若假設阻尼器的阻力大小則與其受力方向的速度成正比, 根據牛頓運動定律, 就可以從物理模型的自由體圖導入系統的運動方程式. 接下來就要利用計算機程式, 解此一系統的微分方程式.</span></p>
 <p><span></span></p>
 <p><span>euler_gnuplot_msd_ex1.c 程式內容:</span></p>
@@ -1169,7 +1174,8 @@ int main() {
  
     return 0;
 }</pre>
-<p><img alt="" height="200" src="/images/motion_plot.png" width="400"/></p><h1>Brython</h1>
+<p><img alt="" height="200" src="/images/motion_plot.png" width="400"/></p>
+<h1>Brython</h1>
 <p><a href="https://en.wikipedia.org/wiki/Python_(programming_language)">https://en.wikipedia.org/wiki/Python_(programming_language)</a></p>
 <h4>Examples:</h4>
 <p style="padding-left: 30px;"><a href="https://gist.github.com/mdecycu/d9082d678096bd58378d6afe2c7fa05d">https://gist.github.com/mdecycu/d9082d678096bd58378d6afe2c7fa05d</a></p>
