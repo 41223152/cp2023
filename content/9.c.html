@@ -143,7 +143,28 @@ img.add_border {
           
         </header>
     <div id="tipue_search_content">8.c << <a href='8.c.html'>Previous</a> <a href='10.c.html'>Next</a> >> 10.c<br /><h1>9.c</h1>
-<br />8.c << <a href='8.c.html'>Previous</a> <a href='10.c.html'>Next</a> >> 10.c</div>
+<pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+
+int main()
+{
+    int days, years, weeks;
+
+    days = 1329; // Total number of days
+
+    // Converts days to years, weeks and days
+    years = days/365; // Calculate years
+    weeks = (days % 365)/7; // Calculate weeks
+    days = days - ((years*365) + (weeks*7)); // Calculate remaining days
+
+    // Print the results
+    printf("Years: %d\n", years);
+    printf("Weeks: %d\n", weeks);
+    printf("Days: %d \n", days);
+
+    return 0;
+}
+</pre>
+<p></p><br />8.c << <a href='8.c.html'>Previous</a> <a href='10.c.html'>Next</a> >> 10.c</div>
         
     <!-- footer -->
       <div class="container">
